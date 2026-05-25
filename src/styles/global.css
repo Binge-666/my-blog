@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+/* ===== 默认主题：暖色调 ===== */
+@theme {
+  --color-primary-50: #fffbeb;
+  --color-primary-100: #fef3c7;
+  --color-primary-200: #fde68a;
+  --color-primary-300: #fcd34d;
+  --color-primary-400: #fbbf24;
+  --color-primary-500: #f59e0b;
+  --color-primary-600: #d97706;
+  --color-primary-700: #b45309;
+  --color-secondary-500: #f43f5e;
+  --color-secondary-600: #e11d48;
+  --font-heading: 'ZCOOL XiaoWei', serif;
+  --font-body: 'Noto Sans SC', sans-serif;
+}
+
+/* ===== 森林绿 ===== */
+.theme-forest {
+  --color-primary-50: #ecfdf5;
+  --color-primary-100: #d1fae5;
+  --color-primary-200: #a7f3d0;
+  --color-primary-300: #6ee7b7;
+  --color-primary-400: #34d399;
+  --color-primary-500: #10b981;
+  --color-primary-600: #059669;
+  --color-primary-700: #047857;
+  --color-secondary-500: #8b5cf6;
+  --color-secondary-600: #7c3aed;
+  --font-heading: 'Noto Serif SC', serif;
+}
+
+/* ===== 深邃蓝 ===== */
+.theme-ocean {
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-secondary-500: #06b6d4;
+  --color-secondary-600: #0891b2;
+  --font-heading: 'Inter', sans-serif;
+}
+
+/* ===== 极简黑白 ===== */
+.theme-minimal {
+  --color-primary-50: #fafafa;
+  --color-primary-100: #f5f5f5;
+  --color-primary-200: #e5e5e5;
+  --color-primary-300: #d4d4d4;
+  --color-primary-400: #a3a3a3;
+  --color-primary-500: #525252;
+  --color-primary-600: #404040;
+  --color-primary-700: #262626;
+  --color-secondary-500: #ef4444;
+  --color-secondary-600: #dc2626;
+  --font-heading: 'Playfair Display', serif;
+}
+
+/* ===== 赛博朋克 ===== */
+.theme-cyber {
+  --color-primary-50: #fdf4ff;
+  --color-primary-100: #fae8ff;
+  --color-primary-200: #f5d0fe;
+  --color-primary-300: #f0abfc;
+  --color-primary-400: #e879f9;
+  --color-primary-500: #d946ef;
+  --color-primary-600: #c026d3;
+  --color-primary-700: #a21caf;
+  --color-secondary-500: #22d3ee;
+  --color-secondary-600: #06b6d4;
+  --font-heading: 'Orbitron', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-body);
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+}

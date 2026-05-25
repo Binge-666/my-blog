@@ -1,0 +1,157 @@
+---
+// src/pages/index.astro
+import Layout from '../layouts/Layout.astro';
+
+const postModules = import.meta.glob('../content/posts/*.md', { eager: true });
+
+const posts = Object.entries(postModules).map(([filePath, module]) => {
+  const slug = filePath
+    .split('/')
+    .pop()
+    ?.replace('.md', '') || '';
+
+  return {
+    slug,
+    frontmatter: module.frontmatter,
+    body: module.body
+  };
+}).sort((a, b) => {
+  const dateA = a.frontmatter.pubDate ? new Date(a.frontmatter.pubDate) : new Date(0);
+  const dateB = b.frontmatter.pubDate ? new Date(b.frontmatter.pubDate) : new Date(0);
+  return dateB.getTime() - dateA.getTime();
+});
+
+const formatDate = (date: Date): string => {
+  return date.toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+};
+---
+
+<Layout title="我的博客 | 首页">
+  <!-- 英雄区域 -->
+  <section class="text-center py-12 mb-12">
+    <div class="mb-6">
+      <i class="ri-code-s-slash-line text-primary-500 text-5xl mb-4"></i>
+    </div>
+    <h1 class="text-5xl font-bold text-primary-700 mb-4">
+      欢迎来到我的技术博客
+    </h1>
+    <p class="text-xl text-primary-400 max-w-3xl mx-auto">
+      这里分享技术思考、开发经验和学习笔记。探索前沿技术，记录成长历程。
+    </p>
+  </section>
+
+  <!-- 快速操作区域 -->
+  <div class="max-w-4xl mx-auto mb-12">
+    <div class="bg-primary-50 border border-primary-200 rounded-2xl p-6">
+      <div class="flex items-center mb-4">
+        <i class="ri-lightbulb-flash-line text-primary-600 text-2xl mr-3"></i>
+        <h3 class="text-xl font-semibold text-primary-700">快速开始</h3>
+      </div>
+      <p class="text-primary-500 mb-4">想要创建新文章？前往管理面板快速发布内容。</p>
+      <a
+        href="/admin"
+        class="inline-flex items-center bg-primary-600 text-white px-5 py-3 rounded-lg hover:bg-primary-700 transition-colors"
+      >
+        <i class="ri-add-line mr-2"></i>创建新文章
+      </a>
+    </div>
+  </div>
+
+  <!-- 文章列表区域 -->
+  <section class="max-w-4xl mx-auto">
+    <div class="flex items-center justify-between mb-8 pb-4 border-b border-primary-200">
+      <h2 class="text-3xl font-bold text-primary-700">最新文章</h2>
+      <div class="flex items-center text-primary-400">
+        <i class="ri-article-line mr-2"></i>
+        <span>共 {posts.length} 篇文章</span>
+      </div>
+    </div>
+
+    {posts.length > 0 ? (
+      <div class="space-y-8">
+        {posts.map((post) => (
+          <article
+            key={post.slug}
+            class="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 p-6 border border-primary-100"
+          >
+            <header class="mb-4">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center text-sm text-primary-400">
+                  <i class="ri-calendar-line mr-2"></i>
+                  <time datetime={new Date(post.frontmatter.pubDate).toISOString()}>
+                    {formatDate(new Date(post.frontmatter.pubDate))}
+                  </time>
+                </div>
+
+                {post.frontmatter.tags && post.frontmatter.tags.length > 0 && (
+                  <div class="flex gap-2">
+                    {post.frontmatter.tags.slice(0, 3).map((tag) => (
+                      <span
+                        class="px-3 py-1 bg-primary-50 text-primary-600 text-xs font-medium rounded-full flex items-center"
+                        key={tag}
+                      >
+                        <i class="ri-hashtag mr-1"></i>{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <h3 class="text-2xl font-bold text-primary-700 mb-3">
+                <a
+                  href={`/posts/${post.slug}`}
+                  class="hover:text-primary-600 transition-colors duration-200 flex items-center"
+                >
+                  <i class="ri-file-text-line mr-2 text-primary-500"></i>
+                  {post.frontmatter.title}
+                </a>
+              </h3>
+
+              {post.frontmatter.author && (
+                <div class="text-primary-400 text-sm mb-4 flex items-center">
+                  <i class="ri-user-line mr-2"></i>
+                  作者: {post.frontmatter.author}
+                </div>
+              )}
+            </header>
+
+            <p class="text-primary-500 mb-5 leading-relaxed">
+              {post.frontmatter.description}
+            </p>
+
+            <footer class="flex justify-between items-center">
+              <a
+                href={`/posts/${post.slug}`}
+                class="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium"
+              >
+                阅读全文
+                <i class="ri-arrow-right-line ml-2"></i>
+              </a>
+              <div class="text-sm text-primary-400">
+                <i class="ri-time-line mr-1"></i>
+                约 {Math.ceil(post.body?.length / 500) || 5} 分钟阅读
+              </div>
+            </footer>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-12">
+        <div class="text-primary-200 mb-4">
+          <i class="ri-article-line text-6xl"></i>
+        </div>
+        <p class="text-primary-400 text-lg mb-4">暂无文章，开始创建你的第一篇吧！</p>
+        <a
+          href="/admin"
+          class="inline-flex items-center bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors"
+        >
+          <i class="ri-add-line mr-2"></i>创建第一篇文章
+        </a>
+      </div>
+    )}
+  </section>
+</Layout>

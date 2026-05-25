@@ -1,0 +1,110 @@
+---
+// src/layouts/Layout.astro
+import '../styles/global.css';
+const { title = "我的博客" } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- 主题初始化：必须在最前面，防止闪烁 -->
+  <script is:inline>
+    (function() {
+      var theme = localStorage.getItem('blog-theme') || '';
+      if (theme) document.documentElement.className = theme;
+    })();
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="一个使用Astro构建的个人博客" />
+
+  <title>{title}</title>
+
+  <link rel="stylesheet" href="/styles/global.css" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+
+  <meta property="og:title" content={title} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={Astro.url} />
+  <meta property="og:description" content="一个使用Astro构建的个人博客" />
+</head>
+
+<body class="min-h-screen bg-primary-50 text-primary-700">
+  <!-- 导航栏 -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-primary-200">
+    <div class="container mx-auto px-4 py-4">
+      <nav class="flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
+            <i class="ri-terminal-box-line text-white text-lg"></i>
+          </div>
+          <a href="/" class="text-xl font-bold text-primary-700 hover:text-primary-600 transition-colors">
+            我的博客
+          </a>
+        </div>
+
+        <div class="flex items-center space-x-6">
+          <a href="/" class="flex items-center text-primary-500 hover:text-primary-600 transition-colors font-medium">
+            <i class="ri-home-2-line mr-2"></i>首页
+          </a>
+          <a href="/about" class="flex items-center text-primary-500 hover:text-primary-600 transition-colors font-medium">
+            <i class="ri-information-line mr-2"></i>关于
+          </a>
+          <a href="/posts" class="flex items-center text-primary-500 hover:text-primary-600 transition-colors font-medium">
+            <i class="ri-article-line mr-2"></i>文章
+          </a>
+          <a href="/admin" class="flex items-center text-primary-500 hover:text-primary-600 transition-colors font-medium">
+            <i class="ri-settings-3-line mr-2"></i>管理
+          </a>
+
+          <!-- 主题切换 -->
+          <select id="theme-switcher" class="ml-2 px-3 py-1.5 rounded-lg border border-primary-200 bg-white text-primary-600 text-sm cursor-pointer">
+            <option value="">暖色调</option>
+            <option value="theme-forest">森林绿</option>
+            <option value="theme-ocean">深邃蓝</option>
+            <option value="theme-minimal">极简黑白</option>
+            <option value="theme-cyber">赛博朋克</option>
+          </select>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 主内容 -->
+  <main class="container mx-auto px-4 py-8">
+    <slot />
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="mt-16 border-t border-primary-200 bg-white">
+    <div class="container mx-auto px-4 py-8">
+      <div class="text-center text-primary-400">
+        <p class="flex items-center justify-center mb-2">
+          <i class="ri-copyright-line mr-2"></i>2024 我的博客. 使用
+          <a href="https://astro.build" class="text-primary-600 hover:underline ml-1">Astro</a> 构建
+        </p>
+        <p class="text-sm flex items-center justify-center">
+          <i class="ri-heart-line text-red-500 mr-1"></i>探索、学习、分享
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 主题切换逻辑 -->
+  <script is:inline>
+    (function() {
+      var select = document.getElementById('theme-switcher');
+      if (!select) return;
+      var saved = localStorage.getItem('blog-theme') || '';
+      select.value = saved;
+      select.addEventListener('change', function() {
+        document.documentElement.className = this.value;
+        localStorage.setItem('blog-theme', this.value);
+      });
+    })();
+  </script>
+</body>
+</html>

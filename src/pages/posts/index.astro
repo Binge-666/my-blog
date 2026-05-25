@@ -1,0 +1,141 @@
+---
+// src/pages/posts/index.astro
+// 文章列表页
+import Layout from '../../layouts/Layout.astro';
+
+// 获取所有文章
+const postModules = import.meta.glob('../../content/posts/*.md', { eager: true });
+
+// 处理文章数据
+const posts = Object.entries(postModules).map(([filePath, module]) => {
+  const slug = filePath
+    .split('/')
+    .pop()
+    ?.replace('.md', '') || '';
+    
+  return {
+    slug,
+    frontmatter: module.frontmatter,
+    body: module.body
+  };
+}).sort((a, b) => {
+  // 按日期倒序排序
+  const dateA = a.frontmatter.pubDate ? new Date(a.frontmatter.pubDate) : new Date(0);
+  const dateB = b.frontmatter.pubDate ? new Date(b.frontmatter.pubDate) : new Date(0);
+  return dateB.getTime() - dateA.getTime();
+});
+
+// 日期格式化函数
+const formatDate = (date: Date): string => {
+  return date.toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+};
+---
+
+<Layout title="文章列表 | 我的博客">
+  <div class="max-w-4xl mx-auto">
+    <!-- 页面标题 -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-primary-700 mb-4">所有文章</h1>
+      <p class="text-primary-400 text-lg">这里是我所有的技术文章和学习笔记</p>
+    </div>
+
+    <!-- 文章列表 -->
+    {posts.length > 0 ? (
+      <div class="space-y-8">
+        {posts.map((post) => (
+          <article 
+            key={post.slug}
+            class="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 p-8"
+          >
+            <header class="mb-6">
+              <!-- 文章标题 -->
+              <h2 class="text-2xl font-bold text-primary-700 mb-3">
+                <a 
+                  href={`/posts/${post.slug}`}
+                  class="hover:text-primary-600 transition-colors duration-200"
+                >
+                  {post.frontmatter.title || '未命名文章'}
+                </a>
+              </h2>
+              
+              <!-- 文章元信息 -->
+              <div class="flex items-center text-primary-400 text-sm space-x-6 mb-4">
+                <!-- 发布日期 -->
+                {post.frontmatter.pubDate && (
+                  <div class="flex items-center">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    {formatDate(new Date(post.frontmatter.pubDate))}
+                  </div>
+                )}
+                
+                <!-- 标签 -->
+                {post.frontmatter.tags && post.frontmatter.tags.length > 0 && (
+                  <div class="flex items-center">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                    </svg>
+                    <div class="flex space-x-2">
+                      {post.frontmatter.tags.slice(0, 3).map((tag) => (
+                        <span 
+                          key={tag}
+                          class="px-2 py-1 bg-primary-100 text-primary-400 text-xs rounded"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                      {post.frontmatter.tags.length > 3 && (
+                        <span class="text-primary-300 text-xs">+{post.frontmatter.tags.length - 3}</span>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </header>
+            
+            <!-- 文章描述 -->
+            {post.frontmatter.description && (
+              <p class="text-primary-500 mb-6 leading-relaxed">
+                {post.frontmatter.description}
+              </p>
+            )}
+            
+            <!-- 阅读更多 -->
+            <footer>
+              <a 
+                href={`/posts/${post.slug}`}
+                class="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium"
+              >
+                阅读全文
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </a>
+            </footer>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <!-- 无文章时的提示 -->
+      <div class="text-center py-16">
+        <svg class="w-20 h-20 mx-auto text-primary-200 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        <h3 class="text-xl font-semibold text-primary-400 mb-2">暂无文章</h3>
+        <p class="text-primary-400">还没有发布任何文章，请稍后再来</p>
+      </div>
+    )}
+    
+    <!-- 文章数量统计 -->
+    {posts.length > 0 && (
+      <div class="mt-12 pt-8 border-t border-primary-200 text-center text-primary-400">
+        <p>共 {posts.length} 篇文章</p>
+      </div>
+    )}
+  </div>
+</Layout>

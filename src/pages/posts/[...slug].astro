@@ -1,0 +1,218 @@
+---
+// src/pages/posts/[...slug].astro
+// 文章详情页的动态路由
+// 这个文件处理类似 /posts/hello-world 的URL
+
+import Layout from '../../layouts/Layout.astro';
+
+// 1. 使用 Astro 的新API: getStaticPaths
+// 注意: Astro.glob() 在Astro 3.0+中已被弃用
+export async function getStaticPaths() {
+  // 使用 import.meta.glob 替代 Astro.glob
+  // 这会返回一个包含所有Markdown文件的模块对象
+  const postModules = import.meta.glob('../../content/posts/*.md', { eager: true });
+  
+  // 从模块对象中提取信息
+  const posts = Object.entries(postModules).map(([filePath, module]) => {
+    // 从文件路径中提取slug（文件名，不带.md扩展名）
+    const slug = filePath
+      .split('/')
+      .pop()  // 获取文件名
+      ?.replace('.md', '') || '';  // 移除.md扩展名
+    
+    return {
+      slug,
+      frontmatter: module.frontmatter,
+      Content: module.default
+    };
+  });
+  
+  // 返回每个文章的路径和参数
+  return posts.map((post) => ({
+    params: { 
+      slug: post.slug 
+    },
+    props: { 
+      post: {
+        frontmatter: post.frontmatter,
+        Content: post.Content
+      }
+    }
+  }));
+}
+
+// 2. 从Astro.props中获取当前文章的数据
+const { post } = Astro.props;
+const { frontmatter, Content } = post;
+---
+
+<Layout title={`${frontmatter.title} | 我的博客`}>
+  <article class="max-w-4xl mx-auto">
+    <!-- 文章头部 -->
+    <header class="mb-12">
+      <!-- 文章标题 -->
+      <h1 class="text-4xl md:text-5xl font-bold text-primary-700 mb-6">
+        {frontmatter.title}
+      </h1>
+      
+      <!-- 文章元信息 -->
+      <div class="flex flex-wrap items-center gap-4 text-primary-400 mb-8">
+        <!-- 发布日期 -->
+        {frontmatter.pubDate && (
+          <div class="flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <time datetime={new Date(frontmatter.pubDate).toISOString()}>
+              {new Date(frontmatter.pubDate).toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </time>
+          </div>
+        )}
+        
+        <!-- 作者 -->
+        {frontmatter.author && (
+          <div class="flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            <span>{frontmatter.author}</span>
+          </div>
+        )}
+        
+        <!-- 阅读时间 -->
+        <div class="flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>约 {Math.ceil(post.Content?.toString().length / 500) || 5} 分钟阅读</span>
+        </div>
+      </div>
+      
+      <!-- 标签 -->
+      {frontmatter.tags && frontmatter.tags.length > 0 && (
+        <div class="flex flex-wrap gap-2 mb-8">
+          {frontmatter.tags.map((tag) => (
+            <span 
+              key={tag}
+              class="px-3 py-1 bg-primary-50 text-primary-700 text-sm font-medium rounded-full hover:bg-primary-100 transition-colors"
+            >
+              #{tag}
+            </span>
+          ))}
+        </div>
+      )}
+      
+      <!-- 文章描述 -->
+      {frontmatter.description && (
+        <div class="bg-primary-50 border-l-4 border-blue-500 p-6 rounded-r-lg mb-8">
+          <p class="text-lg text-primary-500 italic">{frontmatter.description}</p>
+        </div>
+      )}
+    </header>
+
+    <!-- 文章内容区域 -->
+    <div class="prose prose-lg max-w-none mb-12">
+      <!-- 使用 <Content /> 渲染Markdown内容 -->
+      <Content />
+    </div>
+
+    <!-- 文章底部 -->
+    <footer class="border-t border-primary-200 pt-8 mt-12">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <!-- 分享按钮 -->
+        <div>
+          <h3 class="text-lg font-semibold text-primary-700 mb-3">分享本文</h3>
+          <div class="flex space-x-4">
+            <button 
+              class="p-2 bg-primary-100 hover:bg-primary-200 rounded-full transition-colors"
+              aria-label="分享到Twitter"
+            >
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.213c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+>
+              </svg>
+            </button>
+            <button 
+              class="p-2 bg-primary-100 hover:bg-primary-200 rounded-full transition-colors"
+              aria-label="分享到微博"
+            >
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20.06 8.54c-1.36.6-2.73.97-4.17 1.08 1.56-.94 2.7-2.38 3.25-4.1-1.46.87-3.07 1.5-4.78 1.84-1.37-1.46-3.3-2.37-5.45-2.37-4.12 0-7.46 3.36-7.46 7.5 0 .6.07 1.17.2 1.72-6.2-.31-11.7-3.3-15.37-7.84-.64 1.1-1 2.37-1 3.72 0 2.6 1.33 4.9 3.35 6.24-1.23-.04-2.4-.38-3.42-.94v.1c0 3.63 2.6 6.66 6.05 7.35-.63.17-1.3.26-1.98.26-.48 0-.95-.05-1.4-.14.95 2.97 3.7 5.13 6.97 5.2-2.55 2-5.77 3.2-9.26 3.2-.6 0-1.2-.04-1.78-.1 3.3 2.12 7.22 3.36 11.43 3.36 13.72 0 21.2-11.38 21.2-21.25 0-.32 0-.64-.02-.96 1.46-1.05 2.72-2.35 3.72-3.85z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        <!-- 返回文章列表链接 -->
+        <div>
+          <a 
+            href="/"
+            class="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium"
+          >
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            返回文章列表
+          </a>
+        </div>
+      </div>
+    </footer>
+  </article>
+</Layout>
+
+<style>
+  /* 文章内容样式 */
+  .prose {
+    line-height: 1.8;
+  }
+  
+  .prose h2 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    color: #1f2937;
+  }
+  
+  .prose h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    color: #374151;
+  }
+  
+  .prose p {
+    margin-bottom: 1.5rem;
+    color: #4b5563;
+  }
+  
+  .prose code {
+    background-color: #f3f4f6;
+    padding: 0.2em 0.4em;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+  }
+  
+  .prose pre {
+    background-color: #1f2937;
+    color: #f3f4f6;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+  }
+  
+  .prose a {
+    color: #2563eb;
+    text-decoration: none;
+  }
+  
+  .prose a:hover {
+    text-decoration: underline;
+  }
+</style>
