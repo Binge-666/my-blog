@@ -1,7 +1,7 @@
 ---
 // src/layouts/Layout.astro
 import '../styles/global.css';
-const { title = "我的博客" } = Astro.props;
+const { title = "Binge博客" } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -41,7 +41,7 @@ const { title = "我的博客" } = Astro.props;
             <i class="ri-terminal-box-line text-white text-lg"></i>
           </div>
           <a href="/" class="text-xl font-bold text-primary-700 hover:text-primary-600 transition-colors">
-            我的博客
+            Binge博客
           </a>
         </div>
 
@@ -55,7 +55,7 @@ const { title = "我的博客" } = Astro.props;
           <a href="/posts" class="flex items-center text-primary-500 hover:text-primary-600 transition-colors font-medium">
             <i class="ri-article-line mr-2"></i>文章
           </a>
-          <a href="/admin" class="flex items-center text-primary-500 hover:text-primary-600 transition-colors font-medium">
+          <a href="/admin" class="flex items-center text-primary-500 hover:text-primary-600 transition-colors font-medium hidden">
             <i class="ri-settings-3-line mr-2"></i>管理
           </a>
 
@@ -86,7 +86,7 @@ const { title = "我的博客" } = Astro.props;
     <div class="container mx-auto px-4 py-8">
       <div class="text-center text-primary-400">
         <p class="flex items-center justify-center mb-2">
-          <i class="ri-copyright-line mr-2"></i>2024 我的博客. 使用
+          <i class="ri-copyright-line mr-2"></i>2024 Binge博客. 使用
           <a href="https://astro.build" class="text-primary-600 hover:underline ml-1">Astro</a> 构建
         </p>
         <p class="text-sm flex items-center justify-center">
