@@ -21,7 +21,6 @@ const { title = "我的博客" } = Astro.props;
 
   <title>{title}</title>
 
-  <link rel="stylesheet" href="/styles/global.css" />
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" type="image/png" href="/favicon.png" />
@@ -67,6 +66,10 @@ const { title = "我的博客" } = Astro.props;
             <option value="theme-ocean">深邃蓝</option>
             <option value="theme-minimal">极简黑白</option>
             <option value="theme-cyber">赛博朋克</option>
+            <option value="theme-chinese">中文排版</option>
+            <option value="theme-tech">技术博客</option>
+            <option value="theme-magazine">杂志风格</option>
+            <option value="theme-minimalist">简约灰</option>
           </select>
         </div>
       </nav>

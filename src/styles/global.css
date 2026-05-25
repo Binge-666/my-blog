@@ -76,6 +76,70 @@
   --font-heading: 'Orbitron', sans-serif;
 }
 
+/* ===== 中文排版（适合公众号） ===== */
+.theme-chinese {
+  --color-primary-50: #faf9f7;
+  --color-primary-100: #f5f0eb;
+  --color-primary-200: #e8dfd6;
+  --color-primary-300: #d4c5b5;
+  --color-primary-400: #b8a08a;
+  --color-primary-500: #8b7355;
+  --color-primary-600: #6b5740;
+  --color-primary-700: #4a3c2c;
+  --color-secondary-500: #c41e3a;
+  --color-secondary-600: #a01830;
+  --font-heading: 'Noto Serif SC', 'STSong', serif;
+  --font-body: 'Noto Sans SC', 'PingFang SC', sans-serif;
+}
+
+/* ===== 技术博客（代码高亮） ===== */
+.theme-tech {
+  --color-primary-50: #f8fafc;
+  --color-primary-100: #f1f5f9;
+  --color-primary-200: #e2e8f0;
+  --color-primary-300: #cbd5e1;
+  --color-primary-400: #94a3b8;
+  --color-primary-500: #64748b;
+  --color-primary-600: #475569;
+  --color-primary-700: #334155;
+  --color-secondary-500: #0ea5e9;
+  --color-secondary-600: #0284c7;
+  --font-heading: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-body: 'Inter', 'Noto Sans SC', sans-serif;
+}
+
+/* ===== 杂志风格（图文混排） ===== */
+.theme-magazine {
+  --color-primary-50: #fffbeb;
+  --color-primary-100: #fef3c7;
+  --color-primary-200: #fde68a;
+  --color-primary-300: #fcd34d;
+  --color-primary-400: #fbbf24;
+  --color-primary-500: #d97706;
+  --color-primary-600: #b45309;
+  --color-primary-700: #92400e;
+  --color-secondary-500: #dc2626;
+  --color-secondary-600: #b91c1c;
+  --font-heading: 'Playfair Display', 'Noto Serif SC', serif;
+  --font-body: 'Georgia', 'Noto Serif SC', serif;
+}
+
+/* ===== 简约灰（高级感） ===== */
+.theme-minimalist {
+  --color-primary-50: #fafafa;
+  --color-primary-100: #f4f4f5;
+  --color-primary-200: #e4e4e7;
+  --color-primary-300: #d4d4d8;
+  --color-primary-400: #a1a1aa;
+  --color-primary-500: #71717a;
+  --color-primary-600: #52525b;
+  --color-primary-700: #27272a;
+  --color-secondary-500: #18181b;
+  --color-secondary-600: #09090b;
+  --font-heading: 'Inter', 'Noto Sans SC', sans-serif;
+  --font-body: 'Inter', 'Noto Sans SC', sans-serif;
+}
+
 html {
   scroll-behavior: smooth;
   font-family: var(--font-body);
@@ -83,4 +147,32 @@ html {
 
 body {
   -webkit-font-smoothing: antialiased;
+}
+
+/* ===== 文章内容样式 ===== */
+.prose h1 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: var(--color-primary-700);
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-primary-600);
+}
+
+.prose p {
+  margin-bottom: 1rem;
+  line-height: 1.8;
+}
+
+.prose img {
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+  max-width: 100%;
 }
