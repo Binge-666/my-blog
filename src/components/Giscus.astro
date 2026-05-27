@@ -1,0 +1,87 @@
+---
+// src/components/Giscus.astro
+// Giscus 评论组件 - 基于 GitHub Discussions
+// 需要在 https://giscus.app/ 配置并获取参数
+
+interface Props {
+  repo: string;
+  repoId: string;
+  category: string;
+  categoryId: string;
+  mapping?: string;
+  reactionsEnabled?: boolean;
+  emitMetadata?: boolean;
+  inputPosition?: 'top' | 'bottom';
+  theme?: 'light' | 'dark' | 'preferred_color_scheme' | 'transparent' | 'cobalt';
+  lang?: string;
+}
+
+const {
+  repo = "Binge-666/my-blog",
+  repoId = "R_kgDOSnFywA",
+  category = "Announcements",
+  categoryId = "DIC_kwDOSnFywM4C98E9",
+  mapping = "pathname",
+  reactionsEnabled = true,
+  emitMetadata = false,
+  inputPosition = "bottom",
+  theme = "preferred_color_scheme",
+  lang = "zh-CN"
+} = Astro.props;
+---
+
+<div class="giscus-comments mt-12 pt-8 border-t border-primary-200">
+  <h3 class="text-2xl font-bold text-primary-700 mb-6">评论区</h3>
+  <div id="giscus-container">
+    <script
+      src="https://giscus.app/client.js"
+      data-repo={repo}
+      data-repo-id={repoId}
+      data-category={category}
+      data-category-id={categoryId}
+      data-mapping={mapping}
+      data-reactions-enabled={reactionsEnabled ? "1" : "0"}
+      data-emit-metadata={emitMetadata ? "1" : "0"}
+      data-input-position={inputPosition}
+      data-theme={theme}
+      data-lang={lang}
+      crossorigin="anonymous"
+      async
+    ></script>
+  </div>
+</div>
+
+<script is:inline>
+// Giscus 主题同步
+function updateGiscusTheme() {
+  const theme = document.documentElement.className;
+  const giscusFrame = document.querySelector('iframe.giscus-frame');
+  if (giscusFrame) {
+    giscusFrame.contentWindow.postMessage(
+      { giscus: { setConfig: { theme: theme || 'light' } } },
+      'https://giscus.app'
+    );
+  }
+}
+
+// 监听主题变化
+const observer = new MutationObserver((mutations) => {
+  for (const mutation of mutations) {
+    if (mutation.attributeName === 'class') {
+      updateGiscusTheme();
+    }
+  }
+});
+
+observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+</script>
+
+<style>
+  .giscus-comments {
+    max-width: 100%;
+  }
+  
+  .giscus-comments h3 {
+    margin-bottom: 1.5rem;
+  }
+</style>

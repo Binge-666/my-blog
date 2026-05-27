@@ -6,15 +6,17 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-  "dev": "astro dev",
-  "build": "astro build",
-  "preview": "astro preview",
-  "astro": "astro",
-  "post:create": "node blog-manager.mjs create",
-  "post:list": "node blog-manager.mjs list",
-  "post:stats": "node blog-manager.mjs stats"
-},
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "post:create": "node blog-manager.mjs create",
+    "post:list": "node blog-manager.mjs list",
+    "post:stats": "node blog-manager.mjs stats"
+  },
   "dependencies": {
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.7.3",
     "@tailwindcss/vite": "^4.2.4",
     "astro": "^6.1.9",
     "tailwindcss": "^4.2.4"

@@ -176,3 +176,18 @@ body {
   margin: 1.5rem 0;
   max-width: 100%;
 }
+
+/* ===== 暗黑模式 ===== */
+.theme-dark,
+html.dark {
+  --color-primary-50: #1a1a2e;
+  --color-primary-100: #16213e;
+  --color-primary-200: #0f3460;
+  --color-primary-300: #533483;
+  --color-primary-400: #e94560;
+  --color-primary-500: #bbbac7;
+  --color-primary-600: #d4d4d8;
+  --color-primary-700: #f4f4f5;
+  --color-secondary-500: #e94560;
+  --color-secondary-600: #c70039;
+}

@@ -55,6 +55,15 @@ const { title = "Binge博客" } = Astro.props;
           <a href="/posts" class="flex items-center text-primary-500 hover:text-primary-600 transition-colors font-medium">
             <i class="ri-article-line mr-2"></i>文章
           </a>
+          <a href="/tags" class="flex items-center text-primary-500 hover:text-primary-600 transition-colors font-medium">
+            <i class="ri-price-tag-3-line mr-2"></i>标签
+          </a>
+          <a href="/search" class="flex items-center text-primary-500 hover:text-primary-600 transition-colors font-medium">
+            <i class="ri-search-line mr-2"></i>搜索
+          </a>
+          <a href="/rss.xml" class="flex items-center text-primary-500 hover:text-primary-600 transition-colors font-medium" target="_blank">
+            <i class="ri-rss-line mr-2"></i>RSS
+          </a>
           <a href="/admin" class="flex items-center text-primary-500 hover:text-primary-600 transition-colors font-medium hidden">
             <i class="ri-settings-3-line mr-2"></i>管理
           </a>
@@ -71,6 +80,12 @@ const { title = "Binge博客" } = Astro.props;
             <option value="theme-magazine">杂志风格</option>
             <option value="theme-minimalist">简约灰</option>
           </select>
+
+          <!-- 暗黑模式切换 -->
+          <button id="dark-mode-toggle" class="ml-2 p-2 rounded-lg border border-primary-200 bg-white text-primary-600 hover:bg-primary-100 transition-colors" aria-label="切换暗黑模式">
+            <i class="ri-moon-line dark:hidden"></i>
+            <i class="ri-sun-line hidden dark:block"></i>
+          </button>
         </div>
       </nav>
     </div>
@@ -107,6 +122,20 @@ const { title = "Binge博客" } = Astro.props;
         document.documentElement.className = this.value;
         localStorage.setItem('blog-theme', this.value);
       });
+
+      // 暗黑模式切换
+      var darkToggle = document.getElementById('dark-mode-toggle');
+      var isDark = localStorage.getItem('blog-dark') === 'true';
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+      }
+      
+      if (darkToggle) {
+        darkToggle.addEventListener('click', function() {
+          document.documentElement.classList.toggle('dark');
+          localStorage.setItem('blog-dark', document.documentElement.classList.contains('dark'));
+        });
+      }
     })();
   </script>
 </body>

@@ -4,6 +4,9 @@
 // 这个文件处理类似 /posts/hello-world 的URL
 
 import Layout from '../../layouts/Layout.astro';
+import Giscus from '../../components/Giscus.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
 
 // 1. 使用 Astro 的新API: getStaticPaths
 // 注意: Astro.glob() 在Astro 3.0+中已被弃用
@@ -13,22 +16,29 @@ export async function getStaticPaths() {
   const postModules = import.meta.glob('../../content/posts/*.md', { eager: true });
   
   // 从模块对象中提取信息
-  const posts = Object.entries(postModules).map(([filePath, module]) => {
-    // 从文件路径中提取slug（文件名，不带.md扩展名）
-    const slug = filePath
-      .split('/')
-      .pop()  // 获取文件名
-      ?.replace('.md', '') || '';  // 移除.md扩展名
-    
-    return {
-      slug,
-      frontmatter: module.frontmatter,
-      Content: module.default
-    };
-  });
+  const posts = Object.entries(postModules)
+    .map(([filePath, module]) => {
+      // 从文件路径中提取slug（文件名，不带.md扩展名）
+      const slug = filePath
+        .split('/')
+        .pop()  // 获取文件名
+        ?.replace('.md', '') || '';  // 移除.md扩展名
+      
+      // 获取文章的 headings（标题）
+      const headings = module.getHeadings ? module.getHeadings() : [];
+      
+      return {
+        slug,
+        frontmatter: module.frontmatter,
+        Content: module.default,
+        headings
+      };
+    })
+    .filter(post => post.frontmatter.title && post.frontmatter.pubDate && !post.frontmatter.draft)
+    .sort((a, b) => new Date(b.frontmatter.pubDate).getTime() - new Date(a.frontmatter.pubDate).getTime());
   
-  // 返回每个文章的路径和参数
-  return posts.map((post) => ({
+  // 返回每个文章的路径和参数，包含上一篇/下一篇信息
+  return posts.map((post, index) => ({
     params: { 
       slug: post.slug 
     },
@@ -36,18 +46,33 @@ export async function getStaticPaths() {
       post: {
         frontmatter: post.frontmatter,
         Content: post.Content
-      }
+      },
+      headings: post.headings,
+      prevPost: index < posts.length - 1 ? {
+        slug: posts[index + 1].slug,
+        title: posts[index + 1].frontmatter.title
+      } : null,
+      nextPost: index > 0 ? {
+        slug: posts[index - 1].slug,
+        title: posts[index - 1].frontmatter.title
+      } : null
     }
   }));
 }
 
 // 2. 从Astro.props中获取当前文章的数据
-const { post } = Astro.props;
+const { post, headings, prevPost, nextPost } = Astro.props;
 const { frontmatter, Content } = post;
 ---
 
 <Layout title={`${frontmatter.title} | 我的博客`}>
   <article class="max-w-4xl mx-auto">
+    <!-- 面包屑导航 -->
+    <Breadcrumb items={[
+      { label: '文章', href: '/posts' },
+      { label: frontmatter.title }
+    ]} />
+
     <!-- 文章头部 -->
     <header class="mb-12">
       <!-- 文章标题 -->
@@ -114,10 +139,16 @@ const { frontmatter, Content } = post;
       )}
     </header>
 
-    <!-- 文章内容区域 -->
-    <div class="prose prose-lg max-w-none mb-12">
-      <!-- 使用 <Content /> 渲染Markdown内容 -->
-      <Content />
+    <!-- 文章内容区域（带目录） -->
+    <div class="flex">
+      <!-- 文章内容 -->
+      <div class="prose prose-lg max-w-none mb-12 flex-1">
+        <!-- 使用 <Content /> 渲染Markdown内容 -->
+        <Content />
+      </div>
+      
+      <!-- 侧边栏目录 -->
+      <TableOfContents headings={headings} />
     </div>
 
     <!-- 文章底部 -->
@@ -161,6 +192,53 @@ const { frontmatter, Content } = post;
         </div>
       </div>
     </footer>
+
+    <!-- 上一篇/下一篇导航 -->
+    {(prevPost || nextPost) && (
+      <nav class="mt-12 pt-8 border-t border-primary-200">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {prevPost && (
+            <a 
+              href={`/posts/${prevPost.slug}`}
+              class="flex flex-col p-4 bg-white rounded-lg border border-primary-100 hover:border-primary-300 hover:shadow-md transition-all group"
+            >
+              <span class="text-sm text-primary-400 mb-1 flex items-center">
+                <svg class="w-4 h-4 mr-1 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                上一篇
+              </span>
+              <span class="text-primary-700 font-medium line-clamp-1">{prevPost.title}</span>
+            </a>
+          )}
+          {nextPost && (
+            <a 
+              href={`/posts/${nextPost.slug}`}
+              class="flex flex-col p-4 bg-white rounded-lg border border-primary-100 hover:border-primary-300 hover:shadow-md transition-all group md:text-right"
+            >
+              <span class="text-sm text-primary-400 mb-1 flex items-center md:justify-end">
+                下一篇
+                <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
+              <span class="text-primary-700 font-medium line-clamp-1">{nextPost.title}</span>
+            </a>
+          )}
+        </div>
+      </nav>
+    )}
+
+    <!-- 评论区 -->
+    <Giscus 
+      repo="Binge-666/my-blog"
+      repoId="R_kgDOSnFywA"
+      category="Announcements"
+      categoryId="DIC_kwDOSnFywM4C98E9"
+      mapping="pathname"
+      theme="preferred_color_scheme"
+      lang="zh-CN"
+    />
   </article>
 </Layout>
 
@@ -196,15 +274,27 @@ const { frontmatter, Content } = post;
     padding: 0.2em 0.4em;
     border-radius: 0.25rem;
     font-size: 0.875em;
+    font-family: 'Fira Code', 'JetBrains Mono', monospace;
   }
   
   .prose pre {
-    background-color: #1f2937;
-    color: #f3f4f6;
-    padding: 1rem;
-    border-radius: 0.5rem;
+    background-color: #282c34;
+    color: #abb2bf;
+    padding: 1.25rem;
+    border-radius: 0.75rem;
     overflow-x: auto;
     margin-bottom: 1.5rem;
+    font-family: 'Fira Code', 'JetBrains Mono', monospace;
+    line-height: 1.6;
+    border: 1px solid #3e4451;
+  }
+  
+  .prose pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+    font-size: 0.9em;
+    color: inherit;
   }
   
   .prose a {

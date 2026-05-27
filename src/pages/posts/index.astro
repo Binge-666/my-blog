@@ -18,7 +18,10 @@ const posts = Object.entries(postModules).map(([filePath, module]) => {
     frontmatter: module.frontmatter,
     body: module.body
   };
-}).sort((a, b) => {
+})
+// 过滤掉草稿文章
+.filter(post => !post.frontmatter.draft)
+.sort((a, b) => {
   // 按日期倒序排序
   const dateA = a.frontmatter.pubDate ? new Date(a.frontmatter.pubDate) : new Date(0);
   const dateB = b.frontmatter.pubDate ? new Date(b.frontmatter.pubDate) : new Date(0);

@@ -1,0 +1,46 @@
+---
+// src/components/TableOfContents.astro
+// 文章目录组件 - 从文章标题自动生成
+
+interface Props {
+  headings: Array<{
+    depth: number;
+    slug: string;
+    text: string;
+  }>;
+}
+
+const { headings } = Astro.props;
+
+// 只显示 h2 和 h3 级别的标题
+const filteredHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 3);
+---
+
+{filteredHeadings.length > 0 && (
+  <aside class="hidden lg:block sticky top-24 self-start w-64 ml-8">
+    <nav class="p-4 bg-white rounded-xl border border-primary-100">
+      <h3 class="text-lg font-semibold text-primary-700 mb-4 flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+        </svg>
+        目录
+      </h3>
+      <ul class="space-y-2 text-sm">
+        {filteredHeadings.map(heading => (
+          <li 
+            class:list={[
+              heading.depth === 3 && 'ml-4'
+            ]}
+          >
+            <a 
+              href={`#${heading.slug}`}
+              class="block py-1 text-primary-500 hover:text-primary-700 transition-colors line-clamp-1"
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </aside>
+)}
