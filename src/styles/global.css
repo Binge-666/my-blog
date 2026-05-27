@@ -124,18 +124,18 @@
   --font-body: 'Georgia', 'Noto Serif SC', serif;
 }
 
-/* ===== 简约灰（高级感） ===== */
+/* ===== 简约灰（冷色调高级感） ===== */
 .theme-minimalist {
-  --color-primary-50: #fafafa;
-  --color-primary-100: #f4f4f5;
-  --color-primary-200: #e4e4e7;
-  --color-primary-300: #d4d4d8;
-  --color-primary-400: #a1a1aa;
-  --color-primary-500: #71717a;
-  --color-primary-600: #52525b;
-  --color-primary-700: #27272a;
-  --color-secondary-500: #18181b;
-  --color-secondary-600: #09090b;
+  --color-primary-50: #f8fafc;
+  --color-primary-100: #f1f5f9;
+  --color-primary-200: #e2e8f0;
+  --color-primary-300: #cbd5e1;
+  --color-primary-400: #94a3b8;
+  --color-primary-500: #64748b;
+  --color-primary-600: #475569;
+  --color-primary-700: #1e293b;
+  --color-secondary-500: #0ea5e9;
+  --color-secondary-600: #0284c7;
   --font-heading: 'Inter', 'Noto Sans SC', sans-serif;
   --font-body: 'Inter', 'Noto Sans SC', sans-serif;
 }
@@ -291,14 +291,14 @@ html.dark {
 
 /* ===== 暗黑模式：简约灰 ===== */
 .theme-minimalist.dark {
-  --color-primary-50: #09090b;
-  --color-primary-100: #18181b;
-  --color-primary-200: #27272a;
-  --color-primary-300: #3f3f46;
-  --color-primary-400: #a1a1aa;
-  --color-primary-500: #d4d4d8;
-  --color-primary-600: #e4e4e7;
-  --color-primary-700: #fafafa;
-  --color-secondary-500: #a1a1aa;
-  --color-secondary-600: #d4d4d8;
+  --color-primary-50: #0f172a;
+  --color-primary-100: #1e293b;
+  --color-primary-200: #334155;
+  --color-primary-300: #475569;
+  --color-primary-400: #94a3b8;
+  --color-primary-500: #cbd5e1;
+  --color-primary-600: #e2e8f0;
+  --color-primary-700: #f8fafc;
+  --color-secondary-500: #38bdf8;
+  --color-secondary-600: #0ea5e9;
 }
