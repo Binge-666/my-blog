@@ -177,17 +177,128 @@ body {
   max-width: 100%;
 }
 
-/* ===== 暗黑模式 ===== */
-.theme-dark,
+/* ===== 暗黑模式：暖色调（默认） ===== */
 html.dark {
-  --color-primary-50: #1a1a2e;
-  --color-primary-100: #16213e;
-  --color-primary-200: #0f3460;
-  --color-primary-300: #533483;
-  --color-primary-400: #e94560;
-  --color-primary-500: #bbbac7;
-  --color-primary-600: #d4d4d8;
-  --color-primary-700: #f4f4f5;
-  --color-secondary-500: #e94560;
-  --color-secondary-600: #c70039;
+  --color-primary-50: #1c1917;
+  --color-primary-100: #292524;
+  --color-primary-200: #44403c;
+  --color-primary-300: #78716c;
+  --color-primary-400: #fbbf24;
+  --color-primary-500: #f59e0b;
+  --color-primary-600: #fbbf24;
+  --color-primary-700: #fef3c7;
+  --color-secondary-500: #fb7185;
+  --color-secondary-600: #f43f5e;
+}
+
+/* ===== 暗黑模式：森林绿 ===== */
+.theme-forest.dark {
+  --color-primary-50: #022c22;
+  --color-primary-100: #064e3b;
+  --color-primary-200: #065f46;
+  --color-primary-300: #047857;
+  --color-primary-400: #34d399;
+  --color-primary-500: #10b981;
+  --color-primary-600: #34d399;
+  --color-primary-700: #d1fae5;
+  --color-secondary-500: #a78bfa;
+  --color-secondary-600: #8b5cf6;
+}
+
+/* ===== 暗黑模式：深邃蓝 ===== */
+.theme-ocean.dark {
+  --color-primary-50: #0c1a3a;
+  --color-primary-100: #172554;
+  --color-primary-200: #1e3a5f;
+  --color-primary-300: #1d4ed8;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #60a5fa;
+  --color-primary-700: #dbeafe;
+  --color-secondary-500: #22d3ee;
+  --color-secondary-600: #06b6d4;
+}
+
+/* ===== 暗黑模式：极简黑白 ===== */
+.theme-minimal.dark {
+  --color-primary-50: #0a0a0a;
+  --color-primary-100: #171717;
+  --color-primary-200: #262626;
+  --color-primary-300: #525252;
+  --color-primary-400: #a3a3a3;
+  --color-primary-500: #d4d4d4;
+  --color-primary-600: #e5e5e5;
+  --color-primary-700: #fafafa;
+  --color-secondary-500: #f87171;
+  --color-secondary-600: #ef4444;
+}
+
+/* ===== 暗黑模式：赛博朋克 ===== */
+.theme-cyber.dark {
+  --color-primary-50: #1a0a2e;
+  --color-primary-100: #2d1b4e;
+  --color-primary-200: #3b1f6e;
+  --color-primary-300: #7c3aed;
+  --color-primary-400: #e879f9;
+  --color-primary-500: #d946ef;
+  --color-primary-600: #f0abfc;
+  --color-primary-700: #fae8ff;
+  --color-secondary-500: #22d3ee;
+  --color-secondary-600: #06b6d4;
+}
+
+/* ===== 暗黑模式：中文排版 ===== */
+.theme-chinese.dark {
+  --color-primary-50: #1a1510;
+  --color-primary-100: #2c2218;
+  --color-primary-200: #3d3020;
+  --color-primary-300: #6b5740;
+  --color-primary-400: #b8a08a;
+  --color-primary-500: #8b7355;
+  --color-primary-600: #d4c5b5;
+  --color-primary-700: #faf9f7;
+  --color-secondary-500: #f87171;
+  --color-secondary-600: #ef4444;
+}
+
+/* ===== 暗黑模式：技术博客 ===== */
+.theme-tech.dark {
+  --color-primary-50: #0f172a;
+  --color-primary-100: #1e293b;
+  --color-primary-200: #334155;
+  --color-primary-300: #475569;
+  --color-primary-400: #94a3b8;
+  --color-primary-500: #cbd5e1;
+  --color-primary-600: #e2e8f0;
+  --color-primary-700: #f8fafc;
+  --color-secondary-500: #38bdf8;
+  --color-secondary-600: #0ea5e9;
+}
+
+/* ===== 暗黑模式：杂志风格 ===== */
+.theme-magazine.dark {
+  --color-primary-50: #1c1917;
+  --color-primary-100: #292524;
+  --color-primary-200: #44403c;
+  --color-primary-300: #78716c;
+  --color-primary-400: #fbbf24;
+  --color-primary-500: #d97706;
+  --color-primary-600: #fbbf24;
+  --color-primary-700: #fef3c7;
+  --color-secondary-500: #f87171;
+  --color-secondary-600: #ef4444;
+}
+
+/* ===== 暗黑模式：简约灰 ===== */
+.theme-minimalist.dark {
+  --color-primary-50: #09090b;
+  --color-primary-100: #18181b;
+  --color-primary-200: #27272a;
+  --color-primary-300: #3f3f46;
+  --color-primary-400: #a1a1aa;
+  --color-primary-500: #d4d4d8;
+  --color-primary-600: #e4e4e7;
+  --color-primary-700: #fafafa;
+  --color-secondary-500: #a1a1aa;
+  --color-secondary-600: #d4d4d8;
 }

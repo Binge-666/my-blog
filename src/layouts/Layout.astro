@@ -31,9 +31,9 @@ const { title = "Binge博客" } = Astro.props;
   <meta property="og:description" content="一个使用Astro构建的个人博客" />
 </head>
 
-<body class="min-h-screen bg-primary-50 text-primary-700">
+<body class="min-h-screen bg-primary-50 text-primary-700 transition-colors">
   <!-- 导航栏 -->
-  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-primary-200">
+  <header class="sticky top-0 z-50 bg-primary-50/80 backdrop-blur-md border-b border-primary-200 transition-colors">
     <div class="container mx-auto px-4 py-4">
       <nav class="flex justify-between items-center">
         <div class="flex items-center space-x-3">
@@ -69,7 +69,7 @@ const { title = "Binge博客" } = Astro.props;
           </a>
 
           <!-- 主题切换 -->
-          <select id="theme-switcher" class="ml-2 px-3 py-1.5 rounded-lg border border-primary-200 bg-white text-primary-600 text-sm cursor-pointer">
+          <select id="theme-switcher" class="ml-2 px-3 py-1.5 rounded-lg border border-primary-200 bg-primary-100 text-primary-700 text-sm cursor-pointer transition-colors">
             <option value="">暖色调</option>
             <option value="theme-forest">森林绿</option>
             <option value="theme-ocean">深邃蓝</option>
@@ -82,7 +82,7 @@ const { title = "Binge博客" } = Astro.props;
           </select>
 
           <!-- 暗黑模式切换 -->
-          <button id="dark-mode-toggle" class="ml-2 p-2 rounded-lg border border-primary-200 bg-white text-primary-600 hover:bg-primary-100 transition-colors" aria-label="切换暗黑模式">
+          <button id="dark-mode-toggle" class="ml-2 p-2 rounded-lg border border-primary-200 bg-primary-100 text-primary-700 hover:bg-primary-200 transition-colors" aria-label="切换暗黑模式">
             <i class="ri-moon-line dark:hidden"></i>
             <i class="ri-sun-line hidden dark:block"></i>
           </button>
@@ -97,7 +97,7 @@ const { title = "Binge博客" } = Astro.props;
   </main>
 
   <!-- 页脚 -->
-  <footer class="mt-16 border-t border-primary-200 bg-white">
+  <footer class="mt-16 border-t border-primary-200 bg-primary-50 transition-colors">
     <div class="container mx-auto px-4 py-8">
       <div class="text-center text-primary-400">
         <p class="flex items-center justify-center mb-2">
