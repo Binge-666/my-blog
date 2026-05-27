@@ -200,7 +200,7 @@ const { frontmatter, Content } = post;
           {prevPost && (
             <a 
               href={`/posts/${prevPost.slug}`}
-              class="flex flex-col p-4 bg-white rounded-lg border border-primary-100 hover:border-primary-300 hover:shadow-md transition-all group"
+              class="flex flex-col p-4 bg-primary-100 rounded-lg border border-primary-100 hover:border-primary-300 hover:shadow-md transition-all group"
             >
               <span class="text-sm text-primary-400 mb-1 flex items-center">
                 <svg class="w-4 h-4 mr-1 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -214,7 +214,7 @@ const { frontmatter, Content } = post;
           {nextPost && (
             <a 
               href={`/posts/${nextPost.slug}`}
-              class="flex flex-col p-4 bg-white rounded-lg border border-primary-100 hover:border-primary-300 hover:shadow-md transition-all group md:text-right"
+              class="flex flex-col p-4 bg-primary-100 rounded-lg border border-primary-100 hover:border-primary-300 hover:shadow-md transition-all group md:text-right"
             >
               <span class="text-sm text-primary-400 mb-1 flex items-center md:justify-end">
                 下一篇
@@ -253,7 +253,7 @@ const { frontmatter, Content } = post;
     font-weight: 700;
     margin-top: 2.5rem;
     margin-bottom: 1rem;
-    color: #1f2937;
+    color: var(--color-primary-700);
   }
   
   .prose h3 {
@@ -261,16 +261,16 @@ const { frontmatter, Content } = post;
     font-weight: 600;
     margin-top: 2rem;
     margin-bottom: 0.75rem;
-    color: #374151;
+    color: var(--color-primary-600);
   }
   
   .prose p {
     margin-bottom: 1.5rem;
-    color: #4b5563;
+    color: var(--color-primary-500);
   }
   
   .prose code {
-    background-color: #f3f4f6;
+    background-color: var(--color-primary-200);
     padding: 0.2em 0.4em;
     border-radius: 0.25rem;
     font-size: 0.875em;
@@ -298,7 +298,7 @@ const { frontmatter, Content } = post;
   }
   
   .prose a {
-    color: #2563eb;
+    color: var(--color-secondary-500);
     text-decoration: none;
   }
   
