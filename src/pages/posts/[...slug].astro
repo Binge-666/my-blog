@@ -4,7 +4,7 @@
 // 这个文件处理类似 /posts/hello-world 的URL
 
 import Layout from '../../layouts/Layout.astro';
-import Giscus from '../../components/Giscus.astro';
+import Comments from '../../components/Comments.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 
@@ -230,15 +230,7 @@ const { frontmatter, Content } = post;
     )}
 
     <!-- 评论区 -->
-    <Giscus 
-      repo="Binge-666/my-blog"
-      repoId="R_kgDOSnFywA"
-      category="Announcements"
-      categoryId="DIC_kwDOSnFywM4C98E9"
-      mapping="pathname"
-      theme="preferred_color_scheme"
-      lang="zh-CN"
-    />
+    <Comments />
   </article>
 </Layout>
 

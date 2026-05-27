@@ -1,0 +1,100 @@
+---
+// Comments.astro - 组合评论组件
+// 同时支持 Giscus 和 Waline，用户可切换
+
+import Giscus from './Giscus.astro';
+import Waline from './Waline.astro';
+
+interface Props {
+  path?: string;
+}
+
+const { path = Astro.url.pathname } = Astro.props;
+
+// Waline 服务端地址（需要用户自己部署）
+const WALINE_SERVER = "https://waline-binge.vercel.app";
+---
+
+<div class="comments-section mt-12 pt-8 border-t border-primary-200">
+  <h3 class="text-2xl font-bold text-primary-700 mb-6">评论区</h3>
+  
+  <!-- 评论系统切换按钮 -->
+  <div class="flex gap-2 mb-6">
+    <button 
+      id="tab-giscus"
+      class="comment-tab active px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+      onclick="switchComment('giscus')"
+    >
+      <i class="ri-github-fill mr-1"></i>GitHub 评论
+    </button>
+    <button 
+      id="tab-waline"
+      class="comment-tab px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+      onclick="switchComment('waline')"
+    >
+      <i class="ri-chat-3-line mr-1"></i>访客评论
+    </button>
+  </div>
+
+  <!-- Giscus 评论 -->
+  <div id="comment-giscus" class="comment-panel">
+    <Giscus 
+      repo="Binge-666/my-blog"
+      repoId="R_kgDOSnFywA"
+      category="Announcements"
+      categoryId="DIC_kwDOSnFywM4C98E9"
+      mapping="pathname"
+      theme="preferred_color_scheme"
+      lang="zh-CN"
+    />
+  </div>
+
+  <!-- Waline 评论 -->
+  <div id="comment-waline" class="comment-panel hidden">
+    <Waline 
+      serverURL={WALINE_SERVER}
+      path={path}
+    />
+  </div>
+</div>
+
+<script is:inline>
+function switchComment(type) {
+  // 切换面板显示
+  document.getElementById('comment-giscus').classList.toggle('hidden', type !== 'giscus');
+  document.getElementById('comment-waline').classList.toggle('hidden', type !== 'waline');
+  
+  // 更新标签样式
+  document.querySelectorAll('.comment-tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  document.getElementById('tab-' + type).classList.add('active');
+  
+  // 保存用户选择
+  localStorage.setItem('comment-type', type);
+}
+
+// 页面加载时恢复用户选择
+document.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('comment-type');
+  if (saved === 'waline') {
+    switchComment('waline');
+  }
+});
+</script>
+
+<style>
+  .comment-tab {
+    background-color: var(--color-primary-100);
+    color: var(--color-primary-500);
+  }
+  
+  .comment-tab.active {
+    background-color: var(--color-primary-600);
+    color: white;
+  }
+  
+  .comment-tab:hover:not(.active) {
+    background-color: var(--color-primary-200);
+  }
+</style>

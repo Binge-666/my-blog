@@ -1,0 +1,86 @@
+---
+// Waline 评论组件 - 无需登录即可评论
+// 需要先部署 Waline 服务端：https://waline.js.org/guide/get-started/
+
+interface Props {
+  serverURL: string;
+  path?: string;
+  dark?: boolean;
+}
+
+const {
+  serverURL = "https://waline-binge.vercel.app",
+  path = Astro.url.pathname,
+  dark = false
+} = Astro.props;
+---
+
+<div class="waline-comments mt-12 pt-8 border-t border-primary-200">
+  <div id="waline-container">
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+    <div id="waline"></div>
+  </div>
+</div>
+
+<script is:inline define:vars={{ serverURL, path, dark }}>
+  async function initWaline() {
+    if (typeof Waline === 'undefined') {
+      // 动态加载 Waline
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+
+    Waline.init({
+      el: '#waline',
+      serverURL: serverURL,
+      path: path,
+      dark: document.documentElement.classList.contains('dark'),
+      meta: ['nick', 'mail', 'link'],
+      requiredMeta: ['nick'],
+      locale: {
+        placeholder: '欢迎评论，支持 Markdown 语法~',
+        nick: '昵称',
+        mail: '邮箱（选填）',
+        link: '网址（选填）',
+        submit: '提交评论',
+        comment: '评论',
+        reply: '回复',
+        cancelReply: '取消回复',
+        login: '登录',
+        logout: '退出',
+        admin: '管理员',
+        hot: '最热',
+        earlier: '更早',
+        later: '最新',
+        placeholder: '欢迎评论~',
+        sofa: '还没有评论，快来抢沙发吧！',
+        commentSuccess: '评论成功',
+        commentFail: '评论失败，请重试',
+        loadComments: '加载评论...',
+      }
+    });
+  }
+
+  // 初始化
+  initWaline();
+
+  // 监听暗黑模式变化，更新 Waline 主题
+  const observer = new MutationObserver(() => {
+    const walineEl = document.getElementById('waline');
+    if (walineEl) {
+      walineEl.setAttribute('data-dark', document.documentElement.classList.contains('dark'));
+    }
+  });
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+</script>
+
+<style>
+  .waline-comments {
+    max-width: 100%;
+  }
+</style>
