@@ -34,8 +34,9 @@ const {
     serverURL: serverURL,
     path: path,
     dark: document.documentElement.classList.contains('dark'),
-    meta: ['nick', 'mail', 'link'],
+    meta: ['nick'],
     requiredMeta: ['nick'],
+    login: 'disable',
     locale: {
       placeholder: '欢迎评论，支持 Markdown 语法~',
       nick: '昵称',
@@ -69,5 +70,18 @@ const {
 <style>
   .waline-comments {
     max-width: 100%;
+  }
+  :global(.waline) input[name="mail"],
+  :global(.waline) input[name="link"] {
+    display: none;
+  }
+  :global(.waline) .wl-panel {
+    border-radius: 12px;
+    border: 1px solid var(--color-primary-200);
+  }
+  :global(.waline) .wl-btn {
+    background-color: var(--color-primary-600);
+    border-color: var(--color-primary-600);
+    border-radius: 8px;
   }
 </style>
