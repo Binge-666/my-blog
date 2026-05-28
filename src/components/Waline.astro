@@ -18,12 +18,16 @@ const {
 <div class="waline-comments mt-12 pt-8 border-t border-primary-200">
   <div id="waline-container">
     <link rel="stylesheet" href="/waline.css" />
-    <div id="waline"></div>
+    <div id="waline" data-server-url={serverURL} data-path={path}></div>
   </div>
 </div>
 
-<script type="module" define:vars={{ serverURL, path }}>
+<script type="module">
   import { init } from '/waline.js';
+
+  const walineEl = document.getElementById('waline');
+  const serverURL = walineEl.dataset.serverUrl;
+  const path = walineEl.dataset.path;
 
   init({
     el: '#waline',
@@ -55,7 +59,6 @@ const {
   });
 
   const observer = new MutationObserver(() => {
-    const walineEl = document.getElementById('waline');
     if (walineEl) {
       walineEl.setAttribute('data-dark', document.documentElement.classList.contains('dark'));
     }
